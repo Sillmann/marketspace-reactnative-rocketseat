@@ -2,9 +2,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'react-native';
 import { useFonts, Karla_400Regular, Karla_700Bold} from '@expo-google-fonts/karla';
 import { NativeBaseProvider } from 'native-base';
-import { Loading } from './src/components/Loading';
+import { Loading } from '@components/Loading';
 import { THEME } from './src/theme';
-import { SignIn } from './src/screens/SignIn';
+import { SignIn } from '@screens/SignIn';
 
 export default function App() {
 
