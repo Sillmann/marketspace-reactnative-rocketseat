@@ -11,7 +11,7 @@ export function Routes(){
 
   return(
 		<NavigationContainer theme={theme}>
-			<AppRoutes />	
+			<AuthRoutes />	
 		</NavigationContainer>
   )
 }  

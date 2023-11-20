@@ -12,7 +12,7 @@ export function HomeHeader() {
   return(
 
     <VStack 
-      flex={1}
+      // flex={1}
       p={3}>
 
 
