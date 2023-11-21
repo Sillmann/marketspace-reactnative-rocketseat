@@ -10,7 +10,12 @@ import { Button } from '@components/Button';
 
 import { api } from '@services/api';
 
+import { useAuth } from '@hooks/useAuth';
+import { AppError } from '@utils/AppError';
+
 export function SignIn(){
+
+  const { signIn } = useAuth();
 
   const toast = useToast();
 
@@ -51,22 +56,43 @@ export function SignIn(){
   // };
 
   async function handleSignIn() {
-    const { data } = await api.post('/sessions',{ email, password });
 
-    if (data.user) {
-      toast.show({
-          title: "usuario logado",
+    try {
+      await signIn(email, password );
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não possível foi entrar. Por favor tente novamente mais tarde.";
+
+      if (isAppError) {
+        toast.show({
+          title,
           placement: "top",
-          bgColor: "black",
+          bgColor: "red.500",
         });
-
-    } else {
-      toast.show({
-        title: "usuario não cadastrado",
-        placement: "top",
-        bgColor: "red",
-      });      
+      }
     }
+
+    // const { data } = await api.post('/sessions',{ email, password });
+
+    // if (data.user) {
+
+    //   signIn(email, password );
+
+    //   toast.show({
+    //       title: "usuario logado",
+    //       placement: "top",
+    //       bgColor: "black",
+    //     });
+
+    // } else {
+    //   toast.show({
+    //     title: "usuario não cadastrado",
+    //     placement: "top",
+    //     bgColor: "red",
+    //   });      
+    // }
 
   }
 

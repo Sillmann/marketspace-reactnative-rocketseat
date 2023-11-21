@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'react-native';
 import { useFonts, Karla_400Regular, Karla_700Bold} from '@expo-google-fonts/karla';
 import { NativeBaseProvider } from 'native-base';
 import { Loading } from '@components/Loading';
+import { AuthContextProvider } from '@contexts/AuthContext';
 import { THEME } from './src/theme';
 import { Routes } from './src/routes';
 
@@ -13,9 +13,6 @@ export default function App() {
   return (
     <NativeBaseProvider theme={THEME}>
 
-    {/* <View style={styles.container}> */}
-
-      
 
       <StatusBar 
         barStyle="light-content" 
@@ -23,22 +20,12 @@ export default function App() {
         translucent
       /> 
 
-{/* <Routes/> */}
-
-      {/* { fontsLoaded ? <Text style={{fontFamily: 'Karla_700Bold'}}></Text> : <Loading /> } */}
-      { fontsLoaded ? <Routes/> : <Loading/>}
-
-    {/* </View> */}
+      <AuthContextProvider>
+      
+        { fontsLoaded ? <Routes/> : <Loading/>}
+        
+      </AuthContextProvider> 
 
     </NativeBaseProvider>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#F7F7F8',
-//     alignItems: 'center',
-//     justifyContent: 'center'
-//   },
-// });
