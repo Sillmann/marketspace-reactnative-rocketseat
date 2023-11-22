@@ -28,33 +28,6 @@ export function SignIn(){
     navigation.navigate('signUp');
   }
 
-  // type FormDataProps = {
-  //   email: string;
-  //   password: string;
-  // };
-
-  // const { signIn } = AuthRoutes();
-
-  // const handleSignIn = async ({ email, password }: FormDataProps) => {
-    // try {
-    //   await signIn(email, password);
-    // } catch (error) {
-    //   const isAppError = error instanceof AppError;
-    //   const title = isAppError
-    //     ? error.message
-    //     : "Não possível foi entrar. Por favor tente novamente mais tarde.";
-
-    //   if (isAppError) {
-    //     toast.show({
-    //       title,
-    //       placement: "top",
-    //       bgColor: "red.500",
-    //     });
-    //   }
-
-    // }
-  // };
-
   async function handleSignIn() {
 
     try {
@@ -73,26 +46,6 @@ export function SignIn(){
         });
       }
     }
-
-    // const { data } = await api.post('/sessions',{ email, password });
-
-    // if (data.user) {
-
-    //   signIn(email, password );
-
-    //   toast.show({
-    //       title: "usuario logado",
-    //       placement: "top",
-    //       bgColor: "black",
-    //     });
-
-    // } else {
-    //   toast.show({
-    //     title: "usuario não cadastrado",
-    //     placement: "top",
-    //     bgColor: "red",
-    //   });      
-    // }
 
   }
 

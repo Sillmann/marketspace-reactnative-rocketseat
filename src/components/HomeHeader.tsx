@@ -8,7 +8,12 @@ import defaultUserPhotoImg from '@assets/profile.png';
 import AdsSvg from '@assets/ads.svg';
 import IconRight from '@assets/iconright.png';
 
+import { useAuth } from '@hooks/useAuth';
+
 export function HomeHeader() {
+
+  const { user } = useAuth();
+
   return(
 
     <VStack 
@@ -36,7 +41,7 @@ export function HomeHeader() {
         mr={5}
       >
         <Text color='gray.100'>Boas Vindas</Text>
-        <Text color='gray.100'>Silvio</Text>
+        <Text color='gray.100'>{user.email}</Text>
       </VStack>
 
       <Button 

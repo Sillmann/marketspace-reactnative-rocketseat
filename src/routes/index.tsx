@@ -12,11 +12,11 @@ export function Routes(){
 	const theme = DefaultTheme;
 	const { user } = useAuth();
 
-  console.log("usuario logado", user);
+  // console.log("usuario logado", user);
 
   return(
 		<NavigationContainer theme={theme}>
-			<AuthRoutes />	
+			{ user.email ? <AppRoutes /> : <AuthRoutes />	}
 		</NavigationContainer>
   )
 }  
