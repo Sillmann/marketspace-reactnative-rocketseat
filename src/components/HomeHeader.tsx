@@ -12,7 +12,7 @@ import { useAuth } from '@hooks/useAuth';
 
 export function HomeHeader() {
 
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   return(
 
