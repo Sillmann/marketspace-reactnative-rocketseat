@@ -19,6 +19,7 @@ export function Home(){
 
   const [products, setProducts]= useState(['tenis','bicicleta','armario']);
 
+  
   return(
     <VStack flex={1}>
       <HomeHeader/>

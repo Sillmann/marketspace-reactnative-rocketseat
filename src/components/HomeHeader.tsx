@@ -4,6 +4,9 @@ import { HStack, VStack, Text, Image } from "native-base";
 import { UserPhoto } from "./UserPhoto";
 import { Button } from "@components/Button";
 
+import { useNavigation } from '@react-navigation/native';
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
+
 import defaultUserPhotoImg from '@assets/profile.png';
 import AdsSvg from '@assets/ads.svg';
 import IconRight from '@assets/iconright.png';
@@ -13,6 +16,13 @@ import { useAuth } from '@hooks/useAuth';
 export function HomeHeader() {
 
   const { user, signOut } = useAuth();
+
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+  function handleNew(){
+    navigation.navigate('new');
+  }
+
 
   return(
 
@@ -48,6 +58,7 @@ export function HomeHeader() {
         title="Criar anúncio"
         variant="outline"
         width="120"
+        onPress={handleNew}
       />
 
     </HStack>

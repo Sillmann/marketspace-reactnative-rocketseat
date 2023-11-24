@@ -4,6 +4,7 @@ import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-naviga
 
 import { Home } from '@screens/Home';
 import { MyAds } from '@screens/MyAds';
+import { New } from '@screens/New';
 
 import HomeSvg from '@assets/home.svg';
 import AdsSvg from '@assets/ads.svg';
@@ -57,6 +58,11 @@ export function AppRoutes() {
             <AdsSvg fill={color} width={iconSize} height={iconSize}/>
           )          
         }}
+      />
+
+      <Screen
+        name='new'
+        component={New}
       />
 
     </Navigator>
