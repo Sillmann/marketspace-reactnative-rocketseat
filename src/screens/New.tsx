@@ -8,10 +8,21 @@ import LeftPng from '@assets/left.png';
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
+import { useNavigation } from '@react-navigation/native';
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
+
 export function New(){
 
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  
   const [images, setImages] = useState<any[]>([]);
-
+  const [isNew, setIsNew] = useState<boolean>(true);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [acceptTrade, setAcceptTrade] = useState<boolean>(false);
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
+    
   const handleAdPhotoSelect = async () => {
     try {
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
@@ -77,6 +88,24 @@ export function New(){
       // setIsLoading(false);
     }
   };
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  function handleNewPreview(){
+    navigation.navigate('newpreview', {
+      title,
+      description,
+      price,
+      images,
+      paymentMethods,
+      isNew,
+      acceptTrade,
+    });
+  }
+
+  
 
   return(
     <ScrollView 
@@ -165,6 +194,7 @@ export function New(){
 
       <Input 
           placeholder='Título do anúncio'
+          onChangeText={setTitle}
       />
 
       <Input 
@@ -172,10 +202,15 @@ export function New(){
           multiline={true}
           numberOfLines={5}
           mt={6}
+          onChangeText={setDescription}
       />
 
       <Radio.Group
         name='typeProduct'
+        value={isNew ? "newProduct" : "usedProduct"}
+        onChange={(nextValue) => {
+          setIsNew(nextValue === 'newProduct' ? true : false);
+        }}
       >
        
         <HStack mt={6}>
@@ -212,6 +247,7 @@ export function New(){
 
         <Input 
           placeholder='            Valor do produto'
+          onChangeText={setPrice}
         />
 
         {/* <Text           
@@ -237,6 +273,8 @@ export function New(){
         <Switch
           size={12}
           m={0}
+          onToggle={(value) => setAcceptTrade(value)}
+          value={acceptTrade}
         />
 
       </View>
@@ -248,15 +286,17 @@ export function New(){
         Meios de Pagamento
       </Text>
 
-      <Checkbox.Group>
+      <Checkbox.Group
+        onChange={(value) => setPaymentMethods(value)}   
+        value={paymentMethods}   
+      >
        
           <Checkbox
             value='boleto'
           >
             <Text
             fontSize={18} 
-            >
-              Boleto
+            >Boleto
             </Text>
           </Checkbox>
 
@@ -265,38 +305,34 @@ export function New(){
           >
             <Text
             fontSize={18} 
-            >
-              Pix
+            >Pix
             </Text>
           </Checkbox>
 
           <Checkbox
-            value='dinheiro'
+            value='cash'
           >
             <Text
             fontSize={18} 
-            >
-              Dinheiro
+            >Dinheiro
             </Text>
           </Checkbox>
 
           <Checkbox
-            value='cartao'
+            value='card'
           >
             <Text
             fontSize={18} 
-            >
-              Cartão de Crédito
+            >Cartão de Crédito
             </Text>
           </Checkbox>
 
           <Checkbox
-            value='deposito'
+            value='deposit'
           >
             <Text
             fontSize={18} 
-            >
-              Depósito Bancário
+            >Depósito Bancário
             </Text>
           </Checkbox>
 
@@ -309,13 +345,15 @@ export function New(){
         <Button 
             title='Cancelar'
             w={130}
+            onPress={handleGoBack}
         />
 
         <Button 
             title='Avançar'
             w={130}
-            variant="outline"
+            variant='outline'
             ml={12}
+            onPress={handleNewPreview}
         />
 
       </HStack>  

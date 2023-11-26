@@ -9,7 +9,7 @@ export function Button({ title,variant,...rest}:Props){
     <ButtonNativeBase
       h={12}
       w='full'
-      bg={variant === 'outline' ? 'gray.100' : 'blue.light'}
+      bg={variant === 'outline' ? 'gray.100' : 'gray.500'}
       
       _pressed={{
         bg:variant === 'outline' ? 'gray.400' : 'blue.default'

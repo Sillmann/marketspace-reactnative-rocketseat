@@ -3,8 +3,11 @@ import { useTheme } from 'native-base';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 import { Home } from '@screens/Home';
-import { MyAds } from '@screens/MyAds';
 import { New } from '@screens/New';
+import { NewPreview } from '@screens/NewPreview';
+import { MyAds } from '@screens/MyAds';
+import { MyAd } from '@screens/MyAd';
+import { EditAd } from '@screens/EditAd';
 
 import HomeSvg from '@assets/home.svg';
 import AdsSvg from '@assets/ads.svg';
@@ -13,6 +16,18 @@ import OutSvg from '@assets/out.svg';
 type AppRoutes = {
   home: undefined;
   myads: undefined;
+  myad:{ id: string; };
+  editad:{
+    title: string;
+    description: string;
+    price: string;
+    images: any[];
+    paymentMethods: string[];
+    isNew: boolean;
+    acceptTrade: boolean;
+    id: string; };
+  new: undefined;
+  newpreview: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -61,8 +76,29 @@ export function AppRoutes() {
       />
 
       <Screen
+        name='myad'
+        component={MyAd}
+
+        options={{
+          tabBarIcon: ({ color })=>(
+            <AdsSvg fill={color} width={iconSize} height={iconSize}/>
+          )          
+        }}
+      />
+
+      <Screen
         name='new'
         component={New}
+      />
+
+      <Screen
+        name='newpreview'
+        component={NewPreview}
+      />
+
+      <Screen
+        name='editad'
+        component={EditAd}
       />
 
     </Navigator>
