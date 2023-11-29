@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { AppStackNavigatorRoutesProps } from "@routes/app.routes";
 
 import { Center,
          Text,
@@ -22,11 +22,11 @@ import { api } from '@services/api';
 
 export function MyAds(){
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
 
- function handleGoMyAd( id:string ) {
-   navigation.navigate('myad', { id } );
- };
+  function handleGoMyAd( id:string ) {
+    navigation.navigate('myad', { id } );
+  };
 
   const toast = useToast();
 

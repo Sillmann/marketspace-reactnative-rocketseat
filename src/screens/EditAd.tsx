@@ -1,53 +1,92 @@
 import { useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';   
-import { ScrollView, VStack, HStack, Text, Center, Heading, Image, Radio, Switch, Checkbox } from 'native-base';
+import { ScrollView, VStack, HStack, Text, Center, Heading, Image, Radio, Switch, Checkbox, useToast } from 'native-base';
 import IconLeft from '@assets/left.png';  
 import { useNavigation, useRoute } from '@react-navigation/native';         
-import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { AppStackNavigatorRoutesProps } from '@routes/app.routes';
 import Carousel from 'react-native-reanimated-carousel';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
+import { ProductDTO } from '@dtos/ProductDTO';   
 
 type RouteParams = {
-  title: string;
-  description: string;
-  price: string;
-  images: any[];
-  paymentMethods: string[];
-  isNew: boolean;
-  acceptTrade: boolean;
   id: string;
 };
 
 export function EditAd(){
   
+  const toast = useToast();
+
   const route = useRoute();
 
-  const {
-    title:preTitle,
-    description:preDescription,
-    price:prePrice,
-    images: preImages,
-    paymentMethods: prePaymentMethods,
-    isNew: preIsNew,
-    acceptTrade: preAcceptTrade,
-    id
-  } = route.params as RouteParams;
+  const { id } = route.params as RouteParams;
 
-  const [title, setTitle] = useState<string>(preTitle);
-  const [description, setDescription] = useState<string>(preDescription);
-  const [price, setPrice] = useState<string>(prePrice);
-  const [isNew, setIsNew] = useState<boolean>(preIsNew);
-  const [paymentMethods, setPaymentMethods] = useState<string[]>(prePaymentMethods);
-  const [acceptTrade, setAcceptTrade] = useState<boolean>(preAcceptTrade);
-  const [images, setImages] = useState<any[]>(preImages);  
+  const [product, setProduct] = useState({} as ProductDTO);
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [isNew, setIsNew] = useState<boolean>(false);
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
+  const [acceptTrade, setAcceptTrade] = useState<boolean>(false);
+  const [images, setImages] = useState<any[]>([]);
+
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
   function handleGoBack() {
-    navigation.navigate('myads' );
+    navigation.goBack();
   };
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const productData = await api.get(`products/${id}`);
+        setProduct(productData.data);
+
+        // console.log('productData.data');
+        //console.log(productData.data.price);
+        setTitle(productData.data.name);
+        setDescription(productData.data.description);
+        setPrice(productData.data.price.toString());
+        setIsNew(productData.data.is_new);
+        // setPaymentMethods(productData.data.payment_methods);
+
+        setPaymentMethods(
+
+          productData.data.payment_methods.map(
+            (payment_method) => payment_method.key
+          )
+
+        );
+
+        setAcceptTrade(productData.data.accept_trade);
+        setImages(productData.data.product_images);
+        
+        // console.log(productData.data.payment_methods);
+        // [{"key": "deposit", "name": "Depósito Bancário"}, {"key": "pix", "name": "Pix"}]
+
+
+        // setIsLoading(false);
+      } catch (error) {
+        const isAppError = error instanceof AppError;
+        const title = isAppError
+          ? error.message
+          : "Não foi possível receber os dados do anúncio. Tente Novamente!";
+
+        if (isAppError) {
+          toast.show({
+            title,
+            placement: "top",
+            bgColor: "red.500",
+          });
+        }
+      }
+    };
+
+    loadData();
+  }, []);
+
 
   return(
   <ScrollView>
@@ -98,39 +137,39 @@ export function EditAd(){
       </Text>
 
       <HStack my={5}>
-            {images.length > 0 &&
-              images.map((imageData) => (
-                <Image
-                  w={88}
-                  h={88}
-                  mr={2}
-                  source={{
-                    uri: `${api.defaults.baseURL}/images/${imageData.path}`,
-                  }}
-                  alt="Imagem do novo anúncio"
-                  resizeMode="cover"
-                  borderRadius={8}
-                  key={imageData.path}
-                />
-              ))}
+        {images.length > 0 &&
+          images.map((imageData) => (
+            <Image
+              w={88}
+              h={88}
+              mr={2}
+              source={{
+                uri: `${api.defaults.baseURL}/images/${imageData.path}`,
+              }}
+              alt="Imagem do novo anúncio"
+              resizeMode="cover"
+              borderRadius={8}
+              key={imageData.path}
+            />
+          ))}
 
-            {images.length < 3 && (
-              <Button
-                bg="gray.500"
-                w={88}
-                h={88}
-                ml={2}
-                _pressed={{
-                  borderWidth: 1,
-                  bg: "gray.500",
-                  borderColor: "gray.400",
-                }}
-                // onPress={handleAdPhotoSelect}
-              >
-                
-              </Button>
-            )}
-          </HStack>
+        {images.length < 3 && (
+          <Button
+            bg="gray.500"
+            w={88}
+            h={88}
+            ml={2}
+            _pressed={{
+              borderWidth: 1,
+              bg: "gray.500",
+              borderColor: "gray.400",
+            }}
+            // onPress={handleAdPhotoSelect}
+          >
+            
+          </Button>
+        )}
+      </HStack> 
 
           <Heading color="gray.200" fontSize={18} my={2}>
             Sobre o produto

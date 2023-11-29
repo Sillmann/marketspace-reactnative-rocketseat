@@ -9,7 +9,7 @@ import { Heading,
          } from 'native-base';
 
 import { useNavigation, useRoute } from '@react-navigation/native';         
-import { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { AppStackNavigatorRoutesProps } from "@routes/app.routes";
 
 import { TouchableOpacity } from 'react-native';    
 
@@ -40,28 +40,30 @@ export function MyAd(){
 
   const [product, setProduct] = useState({} as ProductDTO);
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
   function handleGoBack() {
-    navigation.navigate('myads' );
+    navigation.goBack();
   };
 
   function handleGoEditAd() {
-    console.log(product.name);
-    console.log(product.id);
-    navigation.navigate('editad', {
-      title: product.name,
-      description: product.description,
-      price: product.price.toString(),
-      images: product.product_images,
-      //  paymentMethods: product.payment_methods.map((item) => item.key),
-//       {product.payment_methods.map((paymentMethod) => (
+    navigation.navigate('editad', { id } );
+
+//     console.log(product.name);
+//     console.log(product.id);
+//     navigation.navigate('editad', {
+//       title: product.name,
+//       description: product.description,
+//       price: product.price.toString(),
+//       images: product.product_images,
+//       //  paymentMethods: product.payment_methods.map((item) => item.key),
+// //       {product.payment_methods.map((paymentMethod) => (
                             
-//         paymentMethod.key
-// ))}
-      isNew: product.is_new,
-      acceptTrade: product.accept_trade,
-      id: product.id,
-    } );
+// //         paymentMethod.key
+// // ))}
+//       isNew: product.is_new,
+//       acceptTrade: product.accept_trade,
+//       id: product.id,
+//     } );
   };
 
 
@@ -124,6 +126,14 @@ export function MyAd(){
       try {
         const productData = await api.get(`products/${id}`);
         setProduct(productData.data);
+        // console.log(productData.data.name);
+        // console.log('idMyAd===>');
+        // console.log({id});
+        // console.log(product);
+        // console.log(product.name);
+
+        
+
         // setIsLoading(false);
       } catch (error) {
         const isAppError = error instanceof AppError;

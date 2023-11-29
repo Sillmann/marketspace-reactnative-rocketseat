@@ -9,11 +9,11 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
 import { useNavigation } from '@react-navigation/native';
-import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { AppStackNavigatorRoutesProps } from '@routes/app.routes';
 
 export function New(){
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
   
   const [images, setImages] = useState<any[]>([]);
   const [isNew, setIsNew] = useState<boolean>(true);
@@ -113,7 +113,9 @@ export function New(){
       contentContainerStyle={{ flexGrow: 1 }}
     >
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={handleGoBack}
+      >
 
         <Image 
             source={LeftPng}
