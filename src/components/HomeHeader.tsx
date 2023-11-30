@@ -13,6 +13,10 @@ import IconRight from '@assets/iconright.png';
 
 import { useAuth } from '@hooks/useAuth';
 
+import { api } from '@services/api'
+import { AppError } from '@utils/AppError'
+
+
 export function HomeHeader() {
 
   const { user, signOut } = useAuth();
@@ -40,8 +44,14 @@ export function HomeHeader() {
       w="full"
     >
 
+{/* <Text>
+
+      {`${api.defaults.baseURL}/images/${user.avatar}`}
+</Text> */}
+
       <UserPhoto
-        source={{ uri: 'https://github.com/sillmann.png'}}
+        // source={{ uri: 'https://github.com/sillmann.png'}}
+        source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
         size={16}
         alt="User Image"
         mr={4}
@@ -51,7 +61,7 @@ export function HomeHeader() {
         mr={5}
       >
         <Text color='gray.100'>Boas Vindas</Text>
-        <Text color='gray.100'>{user.email}</Text>
+        <Text color='gray.100'>{user.name}</Text>
       </VStack>
 
       <Button 

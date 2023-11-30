@@ -265,9 +265,9 @@ export function EditAd(){
             </Checkbox>
           </Checkbox.Group>
 
-          <Text>
+          {/* <Text>
             test{paymentMethods}
-            </Text>  
+            </Text>   */}
 
             <HStack
         mt={6}

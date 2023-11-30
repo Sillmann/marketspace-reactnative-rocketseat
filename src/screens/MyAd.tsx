@@ -18,12 +18,20 @@ import { Dimensions, StatusBar } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
 import { Button } from '@components/Button';
+import { UserPhoto } from "@components/UserPhoto";
 import { ProductDTO } from '@dtos/ProductDTO';    
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
 
 import IconLeft from '@assets/left.png';         
 import IconEdit from '@assets/edit.png';         
+import IconDeposit from '@assets/deposit.png';         
+import IconPix from '@assets/pix.png';         
+import IconCash from '@assets/cash.png';         
+import IconCard from '@assets/card.png';         
+import IconBoleto from '@assets/boleto.png';     
+
+import { useAuth } from '@hooks/useAuth';
 
 type RouteParams = {
   id: string;
@@ -31,10 +39,15 @@ type RouteParams = {
 
 export function MyAd(){
 
+
+  const { user } = useAuth();
+
   const route = useRoute();
   const { id } = route.params as RouteParams;
 
   const toast = useToast();
+
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
 
   const width = Dimensions.get('window').width;
 
@@ -126,6 +139,19 @@ export function MyAd(){
       try {
         const productData = await api.get(`products/${id}`);
         setProduct(productData.data);
+
+        setPaymentMethods(
+
+          productData.data.payment_methods.map(
+            (payment_method) => payment_method.name
+          )
+
+        );
+
+        console.log('pgtos:');
+        console.log(paymentMethods);
+
+
         // console.log(productData.data.name);
         // console.log('idMyAd===>');
         // console.log({id});
@@ -219,6 +245,31 @@ return(
         )}
       />
 
+      <HStack
+         alignItems='center'
+         mt={3}
+      >
+
+        <UserPhoto
+                // source={{ uri: 'https://github.com/sillmann.png'}}
+                source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
+                size={10}
+                alt="User Image"
+                mr={4}
+              />
+
+        <Text color='gray.100'>{user.name}</Text>
+
+      </HStack>
+
+      {/* <UserPhoto
+      source={{ uri: 'https://github.com/sillmann.png'}}
+      // source={{ uri: `${api.defaults.baseURL}/images/${avatar}` }}
+      size={10}
+      alt="User Image"
+      mr={4}
+      resizeMode="cover"
+      /> */}
 
 
 
@@ -246,6 +297,7 @@ return(
       <HStack
       justifyContent='space-between'
       width='full'
+      mt={3}
       >
 
       <Text
@@ -300,12 +352,124 @@ return(
       Meios de Pagamento:
     </Heading>
 
-    <Text>
+
+    <VStack>
+
+
+          {paymentMethods.map((item) => (
+            <HStack>
+
+              <Text>
+                {item === 'Boleto' && (
+                  <Image 
+                    source={IconBoleto}
+                    alt='Boleto'
+                  />
+                )}
+
+                {item === 'Pix' && (
+                  <Image 
+                    source={IconPix}
+                    alt='Pix'
+                  />
+                )}
+
+                {item === 'Dinheiro' && (
+                  <Image 
+                    source={IconCash}
+                    alt='Dinheiro'
+                  />
+                )}
+
+                {item === 'Card' && (
+                  <Image 
+                    source={IconCard}
+                    alt='Cartão de Crédito'
+                  />
+                )}
+
+                {item === 'Depósito Bancário' && (
+                  <Image 
+                    source={IconDeposit}
+                    alt='Depósito Bancário'
+                  />
+                )}
+
+                {" "}{item}
+              </Text> 
+
+              
+
+            </HStack>
+          ))}
+
+      
+    </VStack>        
+    
+    {/* paymentMethods.map(payment_Method => (
+    
+      <VStack>
+
+        <Text>
+          teste
+        </Text> */}
+
+      {/* {payment_Method.key} */}
+
+      {/* {payment_Method.key} === 'boleto' && (
+            <HStack 
+              alignItems="center">
+
+              <Text 
+                ml={2} 
+                color='gray.300'
+              >Bolet
+              </Text>
+            </HStack>
+        )} */}
+
+
+      {/* </VStack>
+
+      )
+    ) */}
+
+    
+    
+    {/* <Checkbox.Group onChange={setPaymentMethods} value={paymentMethods}>
+      <Checkbox value="boleto">
+        <Text color="gray.300" fontSize={16}>
+          Boleto
+        </Text>
+      </Checkbox>
+      <Checkbox value="pix">
+        <Text color="gray.300" fontSize={16}>
+          Pix
+        </Text>
+      </Checkbox>
+      <Checkbox value="cash">
+        <Text color="gray.300" fontSize={16}>
+          Dinheiro
+        </Text>
+      </Checkbox>
+      <Checkbox value="card">
+        <Text color="gray.300" fontSize={16}>
+          Cartão de Crédito
+        </Text>
+      </Checkbox>
+      <Checkbox value="deposit">
+        <Text color="gray.300" fontSize={16}>
+          Depósito Bancário
+        </Text>
+      </Checkbox>
+    </Checkbox.Group> */}
+
+    {/* <Text> */}
     {/* {product.payment_methods.map((paymentMethod) => (
                             
                               paymentMethod.key
     ))}  */}
-    </Text>
+    {/* </Text> */}
 
    
     {/* {product.payment_methods.includes('boleto') && (
