@@ -8,6 +8,7 @@ import { New } from '@screens/New';
 import { NewPreview } from '@screens/NewPreview';
 import { MyAd } from '@screens/MyAd';
 import { EditAd } from '@screens/EditAd';
+import { EditAdPreview } from '@screens/EditAdPreview';
 
 import HomeSvg from '@assets/home.svg';
 import AdsSvg from '@assets/ads.svg';
@@ -74,7 +75,7 @@ function BottomTabHome() {
       />
 
       <BottomTab.Screen
-        name="MyAds"
+        name="myads"
         component={MyAds}
         options={{
           tabBarIcon: ({ color })=>(
@@ -121,10 +122,19 @@ export function AppRoutes() {
         component={New}
       />
 
-      
+      <NativeStackTab.Screen
+        name='newpreview'
+        component={NewPreview}
+      />
+
       <NativeStackTab.Screen
         name='editad'
         component={EditAd}
+      />
+
+      <NativeStackTab.Screen
+        name='editadpreview'
+        component={EditAdPreview}
       />
 
     </NativeStackTab.Navigator>

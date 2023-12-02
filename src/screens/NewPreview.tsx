@@ -10,7 +10,7 @@ import { UserPhoto } from "@components/UserPhoto";
 import { useAuth } from '@hooks/useAuth';
 
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { AppStackNavigatorRoutesProps } from "@routes/app.routes";
 
 import { Button } from "@components/Button";
 
@@ -26,7 +26,7 @@ type RouteParams = {
 
 export function NewPreview(){
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
 
   const toast = useToast();
 

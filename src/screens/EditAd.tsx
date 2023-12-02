@@ -38,6 +38,19 @@ export function EditAd(){
     navigation.goBack();
   };
 
+  function handleEditAdPreview(){
+    navigation.navigate('editadpreview', {
+      id,
+      title,
+      description,
+      price,
+      images,
+      paymentMethods,
+      isNew,
+      acceptTrade,
+    });
+  }
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -284,7 +297,7 @@ export function EditAd(){
             w={130}
             variant='outline'
             ml={12}
-            // onPress={handleNewPreview}
+            onPress={handleEditAdPreview}
         />
 
       </HStack>              
