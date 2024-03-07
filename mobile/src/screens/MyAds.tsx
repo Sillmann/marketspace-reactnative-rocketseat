@@ -145,69 +145,67 @@ return(
         position='relative'
         >
 
-<Box position='relative' alignItems='center' justifyContent='center'>
+          <Box position='relative' alignItems='center' justifyContent='center'>
 
-    {!item.is_active && (
-                <Text
-                  flex={1}
-                  textTransform="uppercase"
-                  color="white"
-                  fontSize="xs"
-                  position="absolute"
-                  zIndex={100}
-                  bg="gray.300"
-                  p={1}
-                  w={100}
-                  textAlign="center"
-                  borderRadius={10}
-                >
-                  Anúncio Desativado
-                </Text>
-              )}
+            {!item.is_active && (
+              <Text
+                flex={1}
+                textTransform="uppercase"
+                color="white"
+                fontSize="xs"
+                position="absolute"
+                zIndex={100}
+                bg="gray.300"
+                p={1}
+                w={100}
+                textAlign="center"
+                borderRadius={10}
+              >
+                Anúncio Desativado
+              </Text>
+            )}
 
-        <Heading
-            textTransform='uppercase'
-            color='white'
-            fontSize={10}
-            bg={item.is_new ? 'blue.light' : 'gray.200'}
-            position='absolute'
-            zIndex={100}
-            borderRadius={10}
-            py={1}
-            px={2}
-            right={1}
-            top={1}
-          >
-            {item.is_new ? 'Novo' : 'Usado' }
-        </Heading>
-
-
-          <Image
-            w={32}
-            h={24}
-            source={{
-              uri:`${api.defaults.baseURL}/images/${item.product_images[0].path}`
-            }}
-            alt={item.name}
-            borderRadius={10}
-            borderWidth={1}
-            borderColor='gray.500'
-          />
-
-          <Text //color={active ? 'gray.200' : 'gray.400'} 
-            fontSize={14} 
-            mt={1}>
-            {item.name}
-          </Text>
-
-          <Heading //color={active ? 'gray.200' : 'gray.400'} 
-            fontSize={14}>
-            R$ {item.price}
-          </Heading>
+            <Heading
+                textTransform='uppercase'
+                color='white'
+                fontSize={10}
+                bg={item.is_new ? 'blue.light' : 'gray.200'}
+                position='absolute'
+                zIndex={100}
+                borderRadius={10}
+                py={1}
+                px={2}
+                right={1}
+                top={1}
+              >
+                {item.is_new ? 'Novo' : 'Usado' }
+            </Heading>
 
 
+            <Image
+              w={32}
+              h={24}
+              source={{
+                uri:`${api.defaults.baseURL}/images/${item.product_images[0].path}`
+              }}
+              alt={item.name}
+              borderRadius={10}
+              borderWidth={1}
+              borderColor='gray.500'
+            />
 
-        </Box>
+            <Text //color={active ? 'gray.200' : 'gray.400'} 
+              fontSize={14} 
+              mt={1}>
+              {item.name}
+            </Text>
+
+            <Heading //color={active ? 'gray.200' : 'gray.400'} 
+              fontSize={14}>
+              R$ {item.price}
+            </Heading>
+
+          </Box>
 
         </VStack>
         
