@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { VStack, HStack, Box, Image, FlatList, Text, View, useToast, Heading } from 'native-base';
+import { VStack, HStack, Box, Image, FlatList, Text, View, useToast, Heading, ScrollView, Modal, Icon, Pressable } from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 
@@ -21,42 +22,122 @@ import { api } from '@services/api';
 import AdsSvg from '@assets/ads.svg';
 import IconRight from '@assets/iconright.png';
 
+import {
+  AdFiltersForm,
+  FilterObjectType,
+  defaultFiltersValues,
+} from '@components/AdFiltersForm';
+
 export function Home(){
 
+
   const toast = useToast();
+
+  const [isOpenFilterModal, setIsOpenFilterModal] = useState(false);
 
   //const [products, setProducts]= useState(['tenis','bicicleta','armario']);
   const [products, setProducts] = useState<ProductDTO[]>([]);
 
-  useFocusEffect(
-    useCallback(() => {
-      const loadData = async () => {
-        try {
-          const productsData = await api.get(`/users/products`);
+  const [currentFiltersValues, setCurrentFiltersValues] = useState<FilterObjectType>(defaultFiltersValues);
 
-          setProducts(productsData.data);
-          
-        } catch (error) {
-          const isAppError = error instanceof AppError;
-          const title = isAppError
-            ? error.message
-            : 'Não foi possível receber seus anúncios. Tente Novamente!';
+  const { showNew, showUsed, acceptTrade, paymentMethods } = currentFiltersValues;
+  let queryAcceptTrade = `accept_trade=${acceptTrade}`;
+  let queryIsNew = showNew && showUsed ? '' : showNew && !showUsed ? 'is_new=true' : 'is_new=false';
 
-          if (isAppError) {
-            toast.show({
-              title,
-              placement: 'top',
-              bgColor: 'red.500',
-            });
-          }
-        } finally {
-          // setIsLoading(false);
+  let queryPaymentMethods = '';
+  if (paymentMethods.length > 0) {
+    paymentMethods.map(
+      (method) =>
+        (queryPaymentMethods = `${queryPaymentMethods}&payment_methods=${method}`),
+    );
+  }
+
+  const [queryString, setQueryString] = useState<string>('');
+  let searchQuery = queryString ? `query=${queryString}` : '';
+
+  function handleIsOpenFilterModal() {
+    setIsOpenFilterModal(!isOpenFilterModal);
+  }
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // const productsData = await api.get(`/users/products`);
+        console.log("useEffect: " + currentFiltersValues );
+
+        // queryAcceptTrade = `accept_trade=true`;
+
+        // queryIsNew = 'is_new=false';
+
+        // searchQuery = 'query="Casa"';
+
+        // console.log("acceptTrade: " + queryAcceptTrade);
+        // console.log("queryIsNew: " + queryIsNew);
+        // console.log("queryPaymentMethods: " + queryPaymentMethods );
+        // console.log("searchQuery: " + searchQuery );
+
+
+        // const productsData = await api.get(`/products/?${queryAcceptTrade}&${queryIsNew}&${queryPaymentMethods}&${searchQuery}`);
+        const productsData = await api.get(`/products`);
+
+        console.log(productsData.data);
+
+        setProducts(productsData.data);
+        
+      } catch (error) {
+        const isAppError = error instanceof AppError;
+        const title = isAppError
+          ? error.message
+          : 'Não foi possível receber seus anúncios. Tente Novamente!';
+
+        if (isAppError) {
+          toast.show({
+            title,
+            placement: 'top',
+            bgColor: 'red.500',
+          });
         }
-      };
+      } finally {
+        // setIsLoading(false);
+      }
+    };
 
-      loadData();
-    }, [])
-  );
+    loadData();
+  }, [currentFiltersValues]);
+
+  // useFocusEffect(
+  //   useCallback(() => {
+
+  //     console.log("Focus: " + currentFiltersValues );
+
+  //     const loadData = async () => {
+  //       try {
+  //         // const productsData = await api.get(`/users/products`);
+  //         const productsData = await api.get(`/products/?${queryAcceptTrade}&${queryIsNew}&${queryPaymentMethods}&${searchQuery}`);
+
+  //         setProducts(productsData.data);
+          
+  //       } catch (error) {
+  //         const isAppError = error instanceof AppError;
+  //         const title = isAppError
+  //           ? error.message
+  //           : 'Não foi possível receber seus anúncios. Tente Novamente!';
+
+  //         if (isAppError) {
+  //           toast.show({
+  //             title,
+  //             placement: 'top',
+  //             bgColor: 'red.500',
+  //           });
+  //         }
+  //       } finally {
+  //         // setIsLoading(false);
+  //       }
+  //     };
+
+  //     loadData();
+  //   }, [])
+  // );
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
@@ -65,7 +146,14 @@ export function Home(){
   }
 
   return(
+    <>
     <VStack flex={1} >
+
+      <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={true}
+      >
+
       <HomeHeader/>
 
       <Text 
@@ -142,11 +230,16 @@ export function Home(){
         ml={3}
       />
 
-      <Image 
-        source={FilterPng}
-        alt="Filter"
-        ml={3}
-      />
+      <Pressable
+        mr={2}
+        onPress={handleIsOpenFilterModal}
+      >
+        <Image 
+          source={FilterPng}
+          alt="Filter"
+          ml={3}
+        />
+      </Pressable>
 
       </HStack>
 
@@ -238,6 +331,55 @@ export function Home(){
         alt="Armario"
       />     */}
 
+    </ScrollView>
     </VStack>
+
+<Modal
+isOpen={isOpenFilterModal}
+onClose={() => setIsOpenFilterModal(false)}
+safeAreaTop={true}
+size={'full'}
+>
+<Modal.Content
+  h="582"
+  mb={0}
+  mt="auto"
+  roundedTop="2xl"
+  roundedBottom={0}
+  bg="gray.600"
+  px={6}
+  py={8}
+>
+  <HStack
+    justifyContent={'space-between'}
+    alignItems={'center'}
+    mb={6}
+  >
+    <Text
+      fontFamily={'heading'}
+      fontSize="lg"
+    >
+      Filtrar Anúncios
+    </Text>
+
+    <Icon
+      as={AntDesign}
+      name="close"
+      size={6}
+      color="gray.400"
+      onPress={handleIsOpenFilterModal}
+    />
+  </HStack>
+
+  <Modal.Body p={0}>
+    <AdFiltersForm
+      currentFiltersValues={currentFiltersValues}
+      setCurrentFiltersValues={setCurrentFiltersValues}
+      setIsOpenFilterModal={setIsOpenFilterModal}
+    />
+  </Modal.Body>
+</Modal.Content>
+</Modal>
+    </>
   );
 }
