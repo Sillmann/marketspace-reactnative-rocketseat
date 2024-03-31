@@ -15,9 +15,9 @@ export default function App() {
 
 
       <StatusBar 
-        barStyle="light-content" 
+        barStyle="dark-content" 
         backgroundColor="transparent" 
-        translucent
+        // translucent
       /> 
 
       <AuthContextProvider>

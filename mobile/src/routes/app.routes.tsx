@@ -2,11 +2,14 @@ import { useTheme } from 'native-base';
 
 import { Home } from '@screens/Home';
 import { MyAds } from '@screens/MyAds';
+import { Filter } from '@screens/Filter';
+
 import { SignOut } from '@screens/SignOut';
 
 import { New } from '@screens/New';
 import { NewPreview } from '@screens/NewPreview';
 import { MyAd } from '@screens/MyAd';
+import { Ad } from '@screens/Ad';
 import { EditAd } from '@screens/EditAd';
 import { EditAdPreview } from '@screens/EditAdPreview';
 
@@ -32,8 +35,10 @@ type BottomRoutes = {
 type NativeStackRoutes = {
   homeBottom: BottomRoutes
   myad: { id: string }
+  ad: { id: string }
   new: { id: string }
   editad: { id: string }
+  filter: undefined
 }
 
 export type AppBottomNavigatorRoutesProps = BottomTabNavigationProp<BottomRoutes>
@@ -118,8 +123,18 @@ export function AppRoutes() {
       />
 
       <NativeStackTab.Screen
+        name='ad'
+        component={Ad}
+      />    
+
+      <NativeStackTab.Screen
         name='new'
         component={New}
+      />
+
+      <NativeStackTab.Screen
+        name='filter'
+        component={Filter}
       />
 
       <NativeStackTab.Screen

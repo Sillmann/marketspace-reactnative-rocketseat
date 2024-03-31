@@ -61,22 +61,6 @@ export function MyAd(){
   function handleGoEditAd() {
     navigation.navigate('editad', { id } );
 
-//     console.log(product.name);
-//     console.log(product.id);
-//     navigation.navigate('editad', {
-//       title: product.name,
-//       description: product.description,
-//       price: product.price.toString(),
-//       images: product.product_images,
-//       //  paymentMethods: product.payment_methods.map((item) => item.key),
-// //       {product.payment_methods.map((paymentMethod) => (
-                            
-// //         paymentMethod.key
-// // ))}
-//       isNew: product.is_new,
-//       acceptTrade: product.accept_trade,
-//       id: product.id,
-//     } );
   };
 
 
@@ -143,22 +127,10 @@ export function MyAd(){
         setPaymentMethods(
 
           productData.data.payment_methods.map(
-            (payment_method) => payment_method.name
+            (payment_method:any) => payment_method.name
           )
 
         );
-
-        console.log('pgtos:');
-        console.log(paymentMethods);
-
-
-        // console.log(productData.data.name);
-        // console.log('idMyAd===>');
-        // console.log({id});
-        // console.log(product);
-        // console.log(product.name);
-
-        
 
         // setIsLoading(false);
       } catch (error) {
@@ -262,17 +234,6 @@ return(
 
       </HStack>
 
-      {/* <UserPhoto
-      source={{ uri: 'https://github.com/sillmann.png'}}
-      // source={{ uri: `${api.defaults.baseURL}/images/${avatar}` }}
-      size={10}
-      alt="User Image"
-      mr={4}
-      resizeMode="cover"
-      /> */}
-
-
-
       <VStack
         bg='gray.500'
         h={8}
@@ -312,7 +273,12 @@ return(
         fontFamily={'heading'}
         color='blue.400'
       > 
-        R${' '}{product.price}
+
+        {/* R${' '}
+        {product.price.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+        })} */}
+
       </Text>
 
     </HStack>
@@ -406,137 +372,7 @@ return(
       
     </VStack>        
     
-    {/* paymentMethods.map(payment_Method => (
     
-      <VStack>
-
-        <Text>
-          teste
-        </Text> */}
-
-      {/* {payment_Method.key} */}
-
-      {/* {payment_Method.key} === 'boleto' && (
-            <HStack 
-              alignItems="center">
-
-              <Text 
-                ml={2} 
-                color='gray.300'
-              >Bolet
-              </Text>
-            </HStack>
-        )} */}
-
-
-      {/* </VStack>
-
-      )
-    ) */}
-
-    
-    
-    {/* <Checkbox.Group onChange={setPaymentMethods} value={paymentMethods}>
-      <Checkbox value="boleto">
-        <Text color="gray.300" fontSize={16}>
-          Boleto
-        </Text>
-      </Checkbox>
-      <Checkbox value="pix">
-        <Text color="gray.300" fontSize={16}>
-          Pix
-        </Text>
-      </Checkbox>
-      <Checkbox value="cash">
-        <Text color="gray.300" fontSize={16}>
-          Dinheiro
-        </Text>
-      </Checkbox>
-      <Checkbox value="card">
-        <Text color="gray.300" fontSize={16}>
-          Cartão de Crédito
-        </Text>
-      </Checkbox>
-      <Checkbox value="deposit">
-        <Text color="gray.300" fontSize={16}>
-          Depósito Bancário
-        </Text>
-      </Checkbox>
-    </Checkbox.Group> */}
-
-    {/* <Text> */}
-    {/* {product.payment_methods.map((paymentMethod) => (
-                            
-                              paymentMethod.key
-    ))}  */}
-    {/* </Text> */}
-
-   
-    {/* {product.payment_methods.includes('boleto') && (
-        <HStack 
-          alignItems='center'>
-
-          <Text 
-            ml={2} 
-            color='gray.300'
-          >
-            Boleto
-          </Text>
-        </HStack>
-    )}
-
-    {product.payment_methods.includes('pix') && (
-        <HStack 
-          alignItems="center">
-
-          <Text 
-            ml={2} 
-            color='gray.300'
-          >Pix
-          </Text>
-        </HStack>
-    )}
-
-  
-    {product.payment_methods.includes('cash') && (
-        <HStack 
-          alignItems="center">
-
-          <Text 
-            ml={2} 
-            color='gray.300'
-          >Dinheiro
-          </Text>
-        </HStack>
-    )}
-
-    {product.payment_methods.includes('card') && (
-        <HStack 
-          alignItems="center">
-
-          <Text 
-            ml={2} 
-            color='gray.300'
-          >Cartão de Crédito
-          </Text>
-        </HStack>
-    )}
-
-    {product.payment_methods.includes('deposit') && (
-        <HStack 
-          alignItems="center">
-
-          <Text 
-            ml={2} 
-            color='gray.300'
-          >Depósito Bancário
-          </Text>
-        </HStack>
-    )} */}
-
-
-
-
       <HStack
         mt={6}
         justifyContent={'space-between'}
@@ -565,10 +401,7 @@ return(
     <Text
         mt={36}
     >
-      {/* {product.payment_methods.map((item) => item.key)} */}
-      {/* {product.payment_methods.map(
-                  (payment_method) => payment_method.key
-                )} */}
+      
       </Text>
       </>
 

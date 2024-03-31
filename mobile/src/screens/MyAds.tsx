@@ -202,7 +202,12 @@ return(
 
             <Heading //color={active ? 'gray.200' : 'gray.400'} 
               fontSize={14}>
-              R$ {item.price}
+
+              R${' '}
+              {item.price.toLocaleString('pt-BR', {
+                minimumFractionDigits: 3,
+              })}
+
             </Heading>
 
           </Box>

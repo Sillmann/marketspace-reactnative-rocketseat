@@ -155,11 +155,18 @@ export function NewPreview(){
       alignItems='center'
     >
 
-      <UserPhoto
+      {/* <UserPhoto
           source={{ uri: 'https://github.com/sillmann.png'}}
           size={12}
           alt="User Image"
           mr={4}
+      /> */}
+
+      <UserPhoto
+          source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
+          size={12}
+          alt="User Image"
+          m={4}
       />
 
       <Text>
@@ -175,14 +182,16 @@ export function NewPreview(){
       borderRadius={50}
       alignItems='center'
       justifyContent='center'
+      m={2}
     >
 
       <Text
       fontSize={14}
-      color='white'       
+      color='white'    
       >
       {isNew ? 'Novo' : 'Usado' }
-    </Text>  
+      </Text>  
+
     </VStack>   
 
     {/* <Heading

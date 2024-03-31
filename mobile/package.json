@@ -21,6 +21,7 @@
     "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
     "native-base": "^3.4.28",
+    "phosphor": "^0.7.1",
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-bouncy-checkbox": "^3.0.7",

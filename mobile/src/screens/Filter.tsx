@@ -1,94 +1,106 @@
-/* eslint-disable indent */
-import { PaymentMethodsDTO } from '@dtos/PaymentsMethodDTO';
-import { AntDesign } from '@expo/vector-icons';
-import { Badge, Box, HStack, Pressable, Switch, Text, VStack } from 'native-base';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
-
 import { useState } from 'react';
 
-// import { defaultFiltersValues } from '@screens/Home';
-import { Button } from './Button';
+// import { VStack, HStack, Box, Image, FlatList, Text, View, useToast, Heading, ScrollView, Modal, Icon, Pressable } from 'native-base';
 
-export type FilterObjectType = {
-  showNew: boolean;
-  showUsed: boolean;
-  acceptTrade: boolean;
-  paymentMethods: PaymentMethodsDTO[];
-};
+import { VStack, HStack, Text, Icon, Pressable, Badge, Switch, Box, Radio, Checkbox  } from "native-base"
+// import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { Button } from "@components/Button";
 
-type AdFiltersFormProps = {
-  currentFiltersValues: FilterObjectType;
-  setCurrentFiltersValues: (filters: FilterObjectType) => void;
-  setIsOpenFilterModal: (isOpen: boolean) => void;
-};
+import { AntDesign } from '@expo/vector-icons';
 
-export const defaultFiltersValues: FilterObjectType = {
-  showNew: true,
-  showUsed: true,
-  acceptTrade: false,
-  paymentMethods: ['pix', 'card', 'boleto', 'cash', 'deposit'],
-};
+import { storageFilterSave } from '@storage/storageFilter';
 
-export const AdFiltersForm = ({
-  currentFiltersValues,
-  setCurrentFiltersValues,
-  setIsOpenFilterModal,
-}: AdFiltersFormProps) => {
-  const [showNew, setShowNew] = useState<boolean>(currentFiltersValues.showNew);
-  const [showUsed, setShowUsed] = useState<boolean>(currentFiltersValues.showUsed);
-  const [acceptTrade, setAcceptTrade] = useState<boolean>(
-    currentFiltersValues.acceptTrade,
-  );
-  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<
-    PaymentMethodsDTO[]
-  >(currentFiltersValues.paymentMethods);
+import { FilterDTO } from '@dtos/FilterDTO';
 
-  function handleSelectPaymentMethod(selectedMethod: PaymentMethodsDTO) {
-    if (selectedPaymentMethods.includes(selectedMethod)) {
-      setSelectedPaymentMethods(
-        selectedPaymentMethods.filter((method) => method !== selectedMethod),
-      );
-    } else {
-      setSelectedPaymentMethods([...selectedPaymentMethods, selectedMethod]);
+import { useNavigation } from '@react-navigation/native';
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
+
+export function Filter(){
+
+  // const [showNew, setShowNew] = useState(false);
+  // const [showUsed, setShowUsed] = useState(false);
+
+  const [isNew, setIsNew] = useState(false);
+  const [acceptTrade, setAcceptTrade] = useState(false);
+  const [boleto, setBoleto] = useState(false);
+  const [pix, setPix] = useState(false);
+  const [dinheiro, setDinheiro] = useState(false);
+  const [cartao, setCartao] = useState(false);
+  const [deposito, setDeposito] = useState(false);
+  
+  // async function storageUserAndTokenSave(userData: UserDTO, token: string){
+  //   try {
+  //     await storageUserSave(userData);
+  //     await storageAuthTokenSave(token);
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+
+  async function applyFilters() {
+
+    const filter: FilterDTO = {
+      isNew:isNew,
+      acceptTrade:acceptTrade,
+      pix:pix,
+      boleto:boleto,
+      cash:dinheiro,
+      deposit:deposito,
+      card:cartao,
+    };
+
+    console.log(filter);
+
+    try {
+      await storageFilterSave(filter);
+    } catch (error) {
+      throw error;
     }
+
+    navigation.navigate('home');
+
+   
   }
 
-  function handleResetFilters() {
-    setCurrentFiltersValues(defaultFiltersValues);
-    setShowNew(defaultFiltersValues.showNew);
-    setShowUsed(defaultFiltersValues.showUsed);
-    setAcceptTrade(defaultFiltersValues.acceptTrade);
-    setSelectedPaymentMethods(defaultFiltersValues.paymentMethods);
-  }
 
-  function applyFilters() {
-    setCurrentFiltersValues({
-      showNew,
-      showUsed,
-      acceptTrade,
-      paymentMethods: selectedPaymentMethods,
-    });
+  return(
+ 
 
-    setIsOpenFilterModal(false);
-  }
+<VStack //flex={1}
+h="582"
+mb={0}
+mt="auto"
+roundedTop="2xl"
+roundedBottom={0}
+bg="gray.600"
+px={6}
+py={8}
+>
 
-  // useEffect(() => {
-  //   console.log('------- selectedPaymentMethods ---------');
-  //   console.log('selectedPaymentMethods: ', selectedPaymentMethods);
-  //   console.log('showNew:', showNew);
-  //   console.log('showUsed:', showUsed);
-  //   console.log('acceptTrade:', acceptTrade);
-  //   console.log('----------------*******************----------------');
-  // }, []);
+  <HStack
+    justifyContent={'space-between'}
+    alignItems={'center'}
+    mb={6}
+  >
+    <Text
+      fontFamily={'heading'}
+      fontSize="lg"
+    >
+      Filtrar Anúncios
+    </Text>
 
-  // useEffect(() => {
-  // console.log('showNewRef: ', showNewRef.current.children[0].props.children[0]);
-  // console.log(showUsedRef);
-  // }, []);
+    <Icon
+      as={AntDesign}
+      name="close"
+      size={6}
+      color="gray.400"
+      
+    />
+  </HStack>
 
-  return (
-    <>
-      <VStack
+   <VStack
         // flex={1}
         justifyContent="flex-start"
       >
@@ -102,7 +114,29 @@ export const AdFiltersForm = ({
         </Text>
 
         <HStack>
-          <Pressable
+
+        <Radio.Group
+              name="productCondition"
+              value={isNew ? "new" : "used"}
+              onChange={(nextValue) => {
+                setIsNew(nextValue === "new" ? true : false);
+              }}
+            >
+              <HStack>
+                <Radio value="new" my="2" size="sm">
+                  <Text color="gray.200" fontSize={14}>
+                    Novo
+                  </Text>
+                </Radio>
+                <Radio value="used" my="2" ml={5} size="sm">
+                  <Text color="gray.200" fontSize={14}>
+                    Usado
+                  </Text>
+                </Radio>
+              </HStack>
+            </Radio.Group>
+
+          {/* <Pressable
             disabled={!showUsed}
             onPress={() => setShowNew(!showNew)}
           >
@@ -175,9 +209,9 @@ export const AdFiltersForm = ({
                 ) : null}
               </HStack>
             </Badge>
-          </Pressable>
-        </HStack>
-      </VStack>
+          </Pressable> */}
+        </HStack> 
+      </VStack> 
 
       <VStack
         mt={8}
@@ -207,12 +241,59 @@ export const AdFiltersForm = ({
           Meios de pagamentos aceitos
         </Text>
 
+        
         <Box mt="-350px">
-          <BouncyCheckbox
+          
+        <Checkbox 
+          value="boleto" 
+          onChange={setBoleto} 
+          isChecked={boleto}>
+          <Text color="gray.300" fontSize={16}>
+            Boleto
+          </Text>
+        </Checkbox>
+
+        <Checkbox 
+          value="pix"
+          onChange={setPix} 
+          isChecked={pix}>
+          <Text color="gray.300" fontSize={16}>
+            Pix
+          </Text>
+        </Checkbox>
+
+        <Checkbox 
+          value="cash"
+          onChange={setDinheiro} 
+          isChecked={dinheiro}>
+          <Text color="gray.300" fontSize={16}>
+            Dinheiro
+          </Text>
+        </Checkbox>
+
+        <Checkbox 
+          value="card"
+          onChange={setCartao} 
+          isChecked={cartao}>
+          <Text color="gray.300" fontSize={16}>
+            Cartão de Crédito
+          </Text>
+        </Checkbox>
+
+        <Checkbox 
+          value="deposit"
+          onChange={setDeposito} 
+          isChecked={deposito}>
+          <Text color="gray.300" fontSize={16}>
+            Depósito Bancário
+          </Text>
+        </Checkbox>
+        
+          {/* <BouncyCheckbox
             text="Boleto"
             size={20}
             disableBuiltInState={true}
-            isChecked={selectedPaymentMethods.includes('boleto')}
+            
             fillColor="#647AC7"
             iconStyle={{
               borderRadius: 4,
@@ -225,14 +306,14 @@ export const AdFiltersForm = ({
               textDecorationLine: 'none',
               color: '#3E3A40',
             }}
-            onPress={() => handleSelectPaymentMethod('boleto')}
+
           />
 
           <BouncyCheckbox
             text="Pix"
             size={20}
             disableBuiltInState={true}
-            isChecked={selectedPaymentMethods.includes('pix')}
+           
             fillColor="#647AC7"
             iconStyle={{
               borderRadius: 4,
@@ -245,14 +326,14 @@ export const AdFiltersForm = ({
               textDecorationLine: 'none',
               color: '#3E3A40',
             }}
-            onPress={() => handleSelectPaymentMethod('pix')}
+
           />
 
           <BouncyCheckbox
             text="Dinheiro"
             size={20}
             disableBuiltInState={true}
-            isChecked={selectedPaymentMethods.includes('cash')}
+            
             fillColor="#647AC7"
             iconStyle={{
               borderRadius: 4,
@@ -265,14 +346,14 @@ export const AdFiltersForm = ({
               textDecorationLine: 'none',
               color: '#3E3A40',
             }}
-            onPress={() => handleSelectPaymentMethod('cash')}
+
           />
 
           <BouncyCheckbox
             text="Cartão de Crédito"
             size={20}
             disableBuiltInState={true}
-            isChecked={selectedPaymentMethods.includes('card')}
+          
             fillColor="#647AC7"
             iconStyle={{
               borderRadius: 4,
@@ -285,14 +366,14 @@ export const AdFiltersForm = ({
               textDecorationLine: 'none',
               color: '#3E3A40',
             }}
-            onPress={() => handleSelectPaymentMethod('card')}
+
           />
 
           <BouncyCheckbox
             text="Depósito Bancário"
             size={20}
             disableBuiltInState={true}
-            isChecked={selectedPaymentMethods.includes('deposit')}
+          
             fillColor="#647AC7"
             iconStyle={{
               borderRadius: 4,
@@ -305,8 +386,8 @@ export const AdFiltersForm = ({
               textDecorationLine: 'none',
               color: '#3E3A40',
             }}
-            onPress={() => handleSelectPaymentMethod('deposit')}
-          />
+
+          /> */}
         </Box>
 
         <HStack
@@ -318,7 +399,7 @@ export const AdFiltersForm = ({
             variant="gray"
             w="48%"
             px={6}
-            onPress={handleResetFilters}
+
           />
 
           <Button
@@ -330,6 +411,13 @@ export const AdFiltersForm = ({
           />
         </HStack>
       </VStack>
-    </>
-  );
-};
+
+
+
+
+
+</VStack>    
+    
+   
+  )
+}  
